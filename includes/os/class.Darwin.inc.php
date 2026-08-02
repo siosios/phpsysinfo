@@ -46,9 +46,9 @@ class Darwin extends BSDCommon
 	 *
 	 * @return string
 	 */
-	protected function grabkey($key)
+	protected function grabkey($key, $debug = PSI_DEBUG)
 	{
-		if (CommonFunctions::executeProgram('sysctl', $key, $s, PSI_DEBUG)) {
+		if (CommonFunctions::executeProgram('sysctl', $key, $s, $debug)) {
 			$s = preg_replace('/'.$key.': /', '', $s);
 			$s = preg_replace('/'.$key.' = /', '', $s);
 
@@ -128,8 +128,15 @@ class Darwin extends BSDCommon
 				}
 			}
 		}
-		$dev->setCpuSpeed(round($this->grabkey('hw.cpufrequency') / 1000000));
-		$dev->setBusSpeed(round($this->grabkey('hw.busfrequency') / 1000000));
+		$buf = $this->grabkey('hw.cpufrequency');
+		if ($buf !== null && is_numeric($buf = trim($buf))) {
+			$dev->setCpuSpeed(round($buf / 1000000));
+		}
+
+		$buf = $this->grabkey('hw.busfrequency');
+		if ($buf !== null && is_numeric($buf = trim($buf))) {
+			$dev->setBusSpeed(round($buf / 1000000));
+		}
 		$bufn=$this->grabkey('hw.cpufrequency_min');
 		$bufx=$this->grabkey('hw.cpufrequency_max');
 		if (($bufn !== null) && (trim($bufn) != "") && ($bufx !== null) && (trim($bufx) != "") && ($bufn != $bufx)) {

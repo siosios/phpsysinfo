@@ -239,9 +239,9 @@ if (!defined('PSI_CONFIG_FILE')) {
 				}
 			}
 			if (!(defined('PSI_SYSTEM_CODEPAGE') && defined('PSI_SYSTEM_LANG')) //also if both not overloaded in phpsysinfo.ini
-			   && $contents && (preg_match('/^(LANG="?[^"\n]*"?)/m', $contents, $matches)
-			   || preg_match('/^RC_(LANG="?[^"\n]*"?)/m', $contents, $matches)
-			   || preg_match('/^\s*export (LANG="?[^"\n]*"?)/m', $contents, $matches))) {
+			   && $contents && (preg_match('/^(LANG="?[A-Za-z0-9_.@-]+"?)/m', $contents, $matches)
+			   || preg_match('/^RC_(LANG="?[A-Za-z0-9_.@-]+"?)/m', $contents, $matches)
+			   || preg_match('/^\s*export (LANG="?[A-Za-z0-9_.@-]+"?)/m', $contents, $matches))) {
 				if (!defined('PSI_SYSTEM_CODEPAGE')) {
 					if (file_exists($vtfname = PSI_ROOT_FILESYSTEM.'/sys/module/vt/parameters/default_utf8')
 					   && (trim(@file_get_contents($vtfname)) === "1")) {
